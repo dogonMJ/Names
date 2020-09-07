@@ -11,19 +11,19 @@ for (i in c(1:21)){
   res <- rbind(res,c(cat[i],as.numeric(sapply(zz[4:13],mean,na.rm = TRUE))))
 }
 colnames(res) <- c('cat',colnames(df[4:13]))
-write.table(res,'mean_500.txt',sep = '\t',col.names = T)
+#write.table(res,'mean_500.txt',sep = '\t',col.names = T)
 
 #### plot for KDE or ECDF ####
-for (k in c(13)){
-  plot.new()
-  for (i in c(1:21)){
+for (k in c(4:13)){
+  #plot.new()
+  for (i in c(19)){
     zz <- filter(df,grepl(cat[i],df$category1))
     # dens <- density(zz[,k])  #KDE
     # par(new=TRUE)
     # plot(dens$x,dens$y,type="l",xlab="Value",ylab="Count estimate",
     #      xlim = c(-200,1000),ylim = c(0,0.005),main = colnames(zz)[k]) #KDE
-    # plot(ecdf(zz[,k]),verticals=T,do.points=F,main = colnames(zz)[k],
-    #      xlim = c(0,200),ylim = c(0,1)) #ECDF
+    plot(ecdf(zz[,k]),verticals=T,do.points=F,main = colnames(zz)[k], xlab = '',
+         ) #ECDF xlim = c(0,200),ylim = c(0,1)
   }
 }
 
