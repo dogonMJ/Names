@@ -1,7 +1,7 @@
 library(dplyr)
 setwd('C:/Users/Guandu/Desktop/Names')
 df <- read.table('names_500m.txt',sep = "\t",header = T)
-cat <- c('å¡','åœ³','åŸ¤','æº','ç£','å‘','å±±','å´™','æ¹–','æ±Ÿ','é ‚','æ¹³','æºª','æ½­','æ°´','åª','å´Ž','å´','è°·','åŸ”','å¢˜')
+cat <- c('©Y','¦`','°ñ','·¾','ÆW','§|','¤s','±[','´ò','¦¿','³»','Ùõ','·Ë','¼æ','¤ô','©W','±T','®r','¨¦','®H','áY')
 
 ##### export mean or median table ####
 res <- vector()
@@ -24,7 +24,7 @@ for (k in c(4:13)){
     # plot(dens$x,dens$y,type="l",xlab="Value",ylab="Count estimate",
     #      xlim = c(-200,1000),ylim = c(0,0.005),main = colnames(zz)[k]) #KDE
     plot(ecdf(zz[,k]),verticals=T,do.points=F,main = colnames(zz)[k], xlab = '',
-         ) #ECDF xlim = c(0,200),ylim = c(0,1)
+    ) #ECDF xlim = c(0,200),ylim = c(0,1)
   }
 }
 
@@ -37,19 +37,31 @@ ord <- round(100*as.numeric(res[,8])/max(as.numeric(res[,8])))
 mycolors <- mycolors[ord]
 
 symbols(res[,5],res[,11],circles = res[,9],fg="grey",bg=mycolors,
-        xlab = "è·æ²³é“å¹³å‡æ°´å¹³è·é›¢(å…¬å°º)", ylab = "è·æ²³é“å¹³å‡åž‚ç›´è·é›¢(å…¬å°º)") #colnames(res)[5]
+        xlab = "¶Zªe¹D¥­§¡¤ô¥­¶ZÂ÷(¤½¤Ø)", ylab = "¶Zªe¹D¥­§¡««ª½¶ZÂ÷(¤½¤Ø)") #colnames(res)[5]
 text(as.numeric(res[,5]),as.numeric(res[,11]),cat)
+
+legend('topright', legend = c('0.1','0.2','0.3'),pch=1,cex=c(0.5,0.5,0.5))
 
 pie(rep(1, 100), col = heat.colors(100), main = "heat") #color wheel
 
-
+library(showtext)
+library(Cairo)
 library(ggplot2)
+mycolors <- (heat.colors(100))
+font_add("notosanR", "NotoSansCJKtc-Regular.otf")
+
+CairoPDF("TEST.pdf",family = "notosanR")
+showtext_begin()
 ggplot(res,aes(x=HDIS_MEAN, y=VDIS_MEAN,label = cat,fill = GRA_MEAN))+
-  geom_point(shape=21, aes(size=ROUGHNESS_MEAN),show.legend = TRUE)+
-  scale_size_continuous(range=c(5,35))+
-  scale_fill_distiller(palette = 'YlOrRd',trans = 'reverse')+
-  geom_text()+
-  xlab('è·æ²³é“å¹³å‡æ°´å¹³è·é›¢(å…¬å°º)')+ylab('è·æ²³é“å¹³å‡åž‚ç›´è·é›¢(å…¬å°º)')+
-  labs(fill = 'å¡åº¦(%)', size = 'åœ°è¡¨ç²—ç³™åº¦(-)')+
+  geom_point(shape=21, aes(size=ROUGHNESS_MEAN),show.legend = T)+
+  scale_size_continuous(range=c(4,20))+
+  scale_fill_gradientn(colours=mycolors,trans = 'reverse')+ #
+  geom_text(aes(fontface='bold'))+
+  ylim(0,100)+xlim(350,570)+
+  xlab('¶Zªe¹D¥­§¡¤ô¥­¶ZÂ÷(¤½¤Ø)')+ylab('¶Zªe¹D¥­§¡««ª½¶ZÂ÷(¤½¤Ø)')+
+  labs(fill = '©Y«×(%)', size = '¦aªí²ÊÁW«×(-)')+
   theme_bw()
+
+showtext_end()
+dev.off()
 
